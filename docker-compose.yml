@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  nginx:
+    container_name: nginx
+    build: ./docker/nginx
+    command: nginx -g "daemon off;"
+    links:
+      - php
+    ports:
+      - "88:80"
+    volumes:
+      - ./logs/nginx:/var/log/nginx
+      - ./src:/var/www/html
+  composer:
+    image: "composer"
+    volumes:
+      - "./src:/app"
+    command: install
+  php:
+    container_name: php
+    build: ./docker/php
+    ports:
+      - "9100:9000"
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    environment:
+      ROOT_PATH: /var/www/html
+      DB_USERNAME_DEV: <development database user name>
+      DB_PASSWORD_DEV: <development database user password>
+      DB_USERNAME_PROD: <production database user name>
+      DB_PASSWORD_PROD: <production database user password>
