@@ -11,11 +11,11 @@ services:
     volumes:
       - ./logs/nginx:/var/log/nginx
       - ./src:/var/www/html
-  composer:
-    image: "composer"
-    volumes:
-      - "./src:/app"
-    command: install
+  # composer:
+  #   image: "composer"
+  #   volumes:
+  #     - "./src:/app"
+  #   command: install
   php:
     container_name: php
     build: ./docker/php
