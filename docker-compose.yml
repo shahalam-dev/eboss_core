@@ -7,7 +7,7 @@ services:
     links:
       - php
     ports:
-      - "88:80"
+      - "80:80"
     volumes:
       - ./logs/nginx:/var/log/nginx
       - ./src:/var/www/html
@@ -20,7 +20,7 @@ services:
     container_name: php
     build: ./docker/php
     ports:
-      - "9100:9000"
+      - "9000:9000"
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html

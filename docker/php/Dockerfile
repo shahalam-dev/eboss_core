@@ -1,5 +1,5 @@
 FROM php:8.2-fpm
-FROM composer:1.8 AS composer
+# FROM composer:1.8 AS composer
 
 RUN apt-get update
 RUN docker-php-ext-install pdo pdo_mysql mysqli
