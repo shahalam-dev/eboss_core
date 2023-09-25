@@ -15,10 +15,10 @@ class SkeletonData{
 
 
 class Skeleton extends SkeletonData {
-    public $Data;
-    public $Msg;
-    public $Status;
-    public $Status_code;
+    public $data;
+    public $msg;
+    public $status;
+    public $status_code;
     public $total_data;
     //Standard Filter for listing by page limit. Use for paging
     public $page_start;
@@ -27,15 +27,15 @@ class Skeleton extends SkeletonData {
     //Standard Properties
     public $user_id;//User id that access this class
     public $branch_id;//Branch id that access this class
-    public $from; //app name
-    public $db;//Class of DB connector from sql_com
+    public $app_name; //app name
+    public $DB;//Class of DB connector from sql_com
 
     // Class Initialized
     public function __construct($appinfo,$db, $payload){
-        $this->user_id=$appinfo['userID'];//Get userid that access 
-        $this->from=$appinfo['app_name'];//Get app name  that access
+        $this->user_id = $appinfo['userID'];//Get userid that access 
+        $this->app_name = $appinfo['app_name'];//Get app name  that access
         $this->branch_id= $appinfo['sid'];//Get branch id that access=$appinfo['from'];//Get userid that access
-        $this->db=$db;//Set the Db class for db connection
+        $this->DB=$db;//Set the Db class for db connection
 
         // mapping payload to properties
         $this->example_property = $payload['example_property'] ?? null;
@@ -51,10 +51,10 @@ class Skeleton extends SkeletonData {
      * @param array $data
      */
     function resBody($status_code, $status, $msg, $data){
-            $this->Status_code = $status_code;
-            $this->Status = $status;
-            $this->Msg = $msg;
-            $this->Data = $data;
+            $this->status_code = $status_code;
+            $this->status = $status;
+            $this->msg = $msg;
+            $this->data = $data;
     }
 
 
@@ -71,12 +71,8 @@ class Skeleton extends SkeletonData {
             return true;
         } catch (Throwable $e) {
             //if any error occurs, it will be handled here
-            ErrorHandler::handleException($e, $this->from, $this->user_id);
-            $this->Status_code = 400;
-            $this->Status = 'error';
-            $this->Msg = 'Internal server error';
-            $this->Data = null;
-            $this->resBody($this->Status_code,$this->Status,$this->Msg,$this->Data);
+            ErrorHandler::handleException($e, $this->app_name, $this->user_id);
+            $this->resBody(400,'error','Internal Server Error',null);
             return false;
         }  
     }

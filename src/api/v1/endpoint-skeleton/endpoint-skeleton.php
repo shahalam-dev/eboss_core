@@ -44,22 +44,18 @@
     $action_execution_function = function() use ($Skeleton){
         $Skeleton->skeleton_method();
 
-        $response = new ApiResponse($Skeleton->Status_code, $Skeleton->Status, $Skeleton->Msg, $Skeleton->Data);
+        $response = new ApiResponse($Skeleton->status_code, $Skeleton->status, $Skeleton->msg, $Skeleton->data);
         echo $response->toJson();
     };
 
-
-
-
-
+    // Action not found exception handler function
     $action_not_found = function(){
         $response = new ApiResponse(404, "error", "Action not found", null);
         echo $response->toJson();
     };
 
 
-
-
+    // Function execution based action
     switch ($payload ? $payload['action'] : "") {
         case '<action_name>':
                 $action_execution_function();

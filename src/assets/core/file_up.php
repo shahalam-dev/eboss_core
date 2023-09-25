@@ -11,11 +11,11 @@ if($ROOT_PATH==""){
 
 class FileUpload {
 
-    private $from;
+    private $app_name;
     private $user_id;
 
-    public function __construct($from, $user_id) {
-        $this->from = $from;
+    public function __construct($app_name, $user_id) {
+        $this->app_name = $app_name;
         $this->user_id = $user_id;
     }
 
@@ -27,7 +27,7 @@ class FileUpload {
             move_uploaded_file($file[$key]['tmp_name'], $storage_path . '/' . $_FILES[$key]['name']);
             return true;
         } catch (Throwable $e) {
-            ErrorHandler::handleException($e, $this->from, $this->user_id);
+            ErrorHandler::handleException($e, $this->app_name, $this->user_id);
             return false;
         }
     }

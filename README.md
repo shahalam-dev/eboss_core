@@ -131,7 +131,7 @@ How to use the error object in code:
 try {
    // logic
 } catch (Throwable $e) {
-   ErrorHandler::handleException($e, '<from where>', '<from whom>');
+   ErrorHandler::handleException($e, '<app name>', '<user id>');
 }
 
 ```
@@ -291,10 +291,10 @@ The property names within the `Skeleton` class should be intuitive and self-expl
 
 ```php
 class Skeleton extends SkeletonData {
-    public $Data; // api response data
-    public $Msg; // api response message
-    public $Status; // api response status
-    public $Status_code; // api response status code
+    public $data; // api response data
+    public $msg; // api response message
+    public $status; // api response status
+    public $status_code; // api response status code
     public $total_data;
     //Standard Filter for listing by page limit. Use for paging
     public $page_start;
@@ -303,15 +303,15 @@ class Skeleton extends SkeletonData {
     //Standard Properties
     public $user_id;//User id that access this class
     public $branch_id;//Branch id that access this class
-    public $from; //app name
-    public $db;//Class of DB connector from sql_com
+    public $app_name; //app name
+    public $DB;//Class of DB connector from sql_com
 
     // Class Initialized
     public function __construct($appinfo,$db, $payload){
-        $this->user_id=$appinfo['userID'];
-        $this->from=$appinfo['app_name'];
-        $this->branch_id= $appinfo['sid'];['from'];
-        $this->db=$db;
+        $this->user_id = $appinfo['userID'];
+        $this->app_name = $appinfo['app_name'];
+        $this->branch_id= $appinfo['sid'];
+        $this->DB=$db;
 
         // mapping payload to properties
         $this->example_property = $payload['example_property'] ?? null;
@@ -330,7 +330,7 @@ function skeleton_method() {
         return true;
     } catch (Throwable $e) {
         //if any error occurs, it will be handled here
-        ErrorHandler::handleException($e, $this->from, $this->user_id);
+        ErrorHandler::handleException($e, $this->app_name, $this->user_id);
         $this->resBody(400,'error','Internal server error',null);
         return false;
     }
@@ -396,7 +396,7 @@ Endpoint specific action handaling function. which is responsible for executing 
 $action_execution_function = function() use ($Skeleton){
     $Skeleton->skeleton_method();
 
-    $response = new ApiResponse($Skeleton->Status_code, $Skeleton->Status, $Skeleton->Msg, $Skeleton->Data);
+    $response = new ApiResponse($Skeleton->status_code, $Skeleton->status, $Skeleton->msg, $Skeleton->data);
     echo $response->toJson();
 };
 

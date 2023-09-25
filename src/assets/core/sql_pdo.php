@@ -13,16 +13,16 @@ if($ROOT_PATH =="" && $DB_USERNAME_DEV=="" && $DB_PASSWORD_DEV=="" && $DB_USERNA
 
 class PDODB extends PDO
 {
-	private $from;
+	private $app_name;
 	private $user_id;
 	public function __construct($appInfo) {
         try {
-			$this->from = $appInfo['app_name'];
+			$this->app_name = $appInfo['app_name'];
 			$this->user_id = $appInfo['userID'];
             parent::__construct('mysql:host='.$appInfo['host'].';dbname='.$appInfo['db_name'], 'root', '+6fIyU0o1*+Wexic');
 			parent::beginTransaction();
         } catch (Throwable $e) {
-            ErrorHandler::handleException($e, $this->from, $this->user_id);
+            ErrorHandler::handleException($e, $this->app_name, $this->user_id);
         }
 	}
 
@@ -32,7 +32,7 @@ class PDODB extends PDO
 
 	private function handleException($e) {
 			parent::rollBack();
-			ErrorHandler::handleException($e, $this->from, $this->user_id);
+			ErrorHandler::handleException($e, $this->app_name, $this->user_id);
 	}
 	
 	public function select($sql, $array = array(), $fetchMode = PDO::FETCH_ASSOC) {
