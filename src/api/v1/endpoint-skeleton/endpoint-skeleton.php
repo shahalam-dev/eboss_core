@@ -10,7 +10,7 @@
     require_once $ROOT_PATH . '/assets/core/api_response.php';
     require_once $ROOT_PATH . '/assets/core/handle_token.php';
     require_once $ROOT_PATH . '/assets/core/sql_pdo.php';
-    require_once $RzOOT_PATH . '/assets/module-skeleton/module-skeleton.php';
+    require_once $ROOT_PATH . '/assets/module-skeleton/module-skeleton.php';
     
 
     function get_app_info() {

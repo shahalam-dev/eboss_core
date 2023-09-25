@@ -72,7 +72,11 @@ class Skeleton extends SkeletonData {
         } catch (Throwable $e) {
             //if any error occurs, it will be handled here
             ErrorHandler::handleException($e, $this->from, $this->user_id);
-            $this->resBody(400,'error','Internal server error',null);
+            $this->Status_code = 400;
+            $this->Status = 'error';
+            $this->Msg = 'Internal server error';
+            $this->Data = null;
+            $this->resBody($this->Status_code,$this->Status,$this->Msg,$this->Data);
             return false;
         }  
     }
