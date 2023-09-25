@@ -11,7 +11,7 @@
     - [API response Class and Methods](#api-response-class-and-methods)
     - [error handling Class and Methods](#error-handling-class-and-methods)
     - [File upload Class and Methods](#file-upload-class-and-methods)
-    - [handle token](#handle-token)
+    - [Handle token](#handle-token)
     - [Database Class and Methods](#database-class-and-methods)
       - [Inserting data method](#inserting-data-method)
       - [Updating data method](#updating-data-method)
@@ -140,15 +140,53 @@ try {
 
 ### File upload Class and Methods
 
----
-
-### handle token
+The `FileUpload` Class is pretty simple and has one `store_file` method to store file. When creating object form the class need pass three parameters which are, the app name (which send this request) and the user id (who send the request). after that call the method `store_file` (_incomplete_)
 
 ---
 
-The JWToken object plays a crucial role in the Eboss ecosystem by facilitating the decoding of JWTs and the extraction of vital information. Within this ecosystem, the API gateway takes charge of generating tokens enriched with client-specific details. These tokens are transmitted alongside every request to microservices. This allows microservices to leverage the enclosed information for diverse tasks, ranging from establishing connection-specific data for individual clients to directing file storage to specific file servers.
+### Handle token
 
-Utilizing the JWToken object is a simple process, involving just one method: decodeToken. Here's a basic example of how to use it:
+---
+
+The JWToken class plays a crucial role in the Eboss ecosystem by facilitating the decoding of JWTs and the extraction of vital information. Within this ecosystem, the API gateway takes charge of generating tokens enriched with client-specific details. These tokens are transmitted alongside every request to microservices. This allows microservices to leverage the enclosed information for diverse tasks, ranging from establishing connection-specific data for individual clients to directing file storage to specific file servers.
+
+_*NOTE:*_
+
+1. **Create a Folder:** Open your terminal or file explorer and navigate to the location where you want to create the `secrets` folder.
+
+   ```bash
+   mkdir secrets
+   ```
+
+   This command creates a new directory named `secrets`.
+
+2. **Navigate to the 'secrets' Folder:** You need to move into the `secrets` folder.
+
+   ```bash
+   cd secrets
+   ```
+
+3. **Create a Public Key File:** Now, create a file named `public.key` inside the `secrets` folder. You can use a text editor or the `touch` command to create an empty file.
+
+   Using a text editor:
+
+   ```bash
+   nano public.key
+   ```
+
+   This will open the `public.key` file in the `nano` text editor. You can paste your public key into this file and save it.
+
+   Alternatively, you can create an empty file using the `touch` command:
+
+   ```bash
+   touch public.key
+   ```
+
+4. **Add Public Key:** Open the `public.key` file with a text editor and paste your public key information into it. Save the file.
+
+Now, you have successfully created a folder named `secrets`, created a file named `public.key` inside it, and added your public key for decoding tokens.
+
+Utilizing the JWToken class is a simple process, involving just one method: decodeToken. Here's a basic example of how to use it:
 
 ```php
 
@@ -175,47 +213,47 @@ $DB = new PDODB($appInfo); // pass appinfo array as parameter (decoded form toke
 
 #### Inserting data method
 
+This method will insert data into database.
+
 ```php
 $sql="INSERT into <rest of query>";
 $this->DB->insert($sql);
 ```
 
-This method will insert data into database
-
 #### Updating data method
+
+This method will update data into database and will return `1` if data will have updated otherwise 0.
 
 ```php
 $sql="UPDATE <table_name> SET <map column> WHERE <rest of clause>";
 $this->DB->update($sql);
 ```
 
-This method will update data into database and will return `1` if data will have updated otherwise 0.
-
 #### Fetching data method
+
+This method will fetch data from database and return the as array.
 
 ```php
 $sql="SELECT <rest of query> WHERE <rest of cluse>";
 $this->DB->select($sql);
 ```
 
-This method will fetch data from database and return the as array
-
 #### Deleting data method
+
+This method will delete data from database.
 
 ```php
 $sql="insert into <rest of query>";
 $this->DB->delete($sql);
 ```
 
-This method will delete data from database
-
 #### Retrive last inserted ID method
+
+This method will return latest inserted row id.
 
 ```php
 $this->DB->lastInsertedId($sql);
 ```
-
-This method will return latest inserted row id
 
 ---
 
@@ -223,15 +261,23 @@ This method will return latest inserted row id
 
 ## Skeleton of micro-services
 
-There is a skeleton of for business login class and api endpoint. just need to copy rename class name.
+There is a skeleton of for business login class and api endpoint. just need to copy rename where it necessary.
 
 ### Renaming file, folder and classes and methods names
+
+_*NOTE: where `skeleton` phrase is exists need to replace*_
 
 1. `module-skeleton` is inside `src/assets/`. inside `module-skeleton` diretory there is a file called `module-skeleton.php`. replace the directory and file with an appropiate name.(like micro-service/module name).
 2. In `module-skeleton.php` there two classes. one for property name which store in data (map property name with database column name, but property name must be meaningful) and another one is for methods those will handle business logic part. replace those classes name.
 3. Inside `src/api/v1` there is a folder named `endpoint-skeleton` and file named `endpoint-skeleton.php`
 
 ### Module skeleton (about business logic class)
+
+Replace the class name with `<module_name+Data>` like `NewsData` or `PosData`. Declare public property for every columns on the database table assosciate with this module.
+
+_*location*_`src/module-skeleton/`
+
+Replace the class name `Skeleton` to apporipiate name and `SkeletonData` to whatever name given to Skeleton Data class.
 
 ```php
 
@@ -241,15 +287,14 @@ class SkeletonData{
 }
 ```
 
-- Rename the class name with `<module_name+Data>` like `NewsData` or `PosData`.
-- Declare public property for every columns on the database table assosciate with this module.
+The property names within the `Skeleton` class should be intuitive and self-explanatory. If a property's purpose is not immediately clear, please refer to the accompanying comment for clarification.
 
 ```php
 class Skeleton extends SkeletonData {
-    public $Data;
-    public $Msg;
-    public $Status;
-    public $Status_code;
+    public $Data; // api response data
+    public $Msg; // api response message
+    public $Status; // api response status
+    public $Status_code; // api response status code
     public $total_data;
     //Standard Filter for listing by page limit. Use for paging
     public $page_start;
@@ -274,7 +319,7 @@ class Skeleton extends SkeletonData {
 }
 ```
 
-- Replace the class name `Skeleton` to apporipiate name and `SkeletonData` to whatever name given to Skeleton Data class.
+Replace the methods name. Write down all the logics inside try block. Call the `resBody` method to construct api response body.
 
 ```php
 function skeleton_method() {
@@ -293,20 +338,18 @@ function skeleton_method() {
 
 ```
 
-- Replace the methods name.
-- Write down all the logics inside try block.
-- call the `resBody` method to construct api response body.
-
 ---
 
 ### Endpoint skeleton (about handling api request and response)
+
+This `$request_body` variable capture the data sends from client-side and then `$payload` is an array of decoded json data.
 
 ```php
 $request_body = file_get_contents('php://input');
 $payload = json_decode($request_body,true);
 ```
 
-This `$request_body` variable capture the data sends from client-side and then `$payload` is an array of decoded json data.
+This function will extract data from `X-Encrypted-Key` token (the token sends with every request form apigateway) and set set those data into `appInfoArr`.
 
 ```php
 function get_app_info() {
@@ -332,7 +375,7 @@ $appInfo = get_app_info();
 
 ```
 
-this function will extract data from `X-Encrypted-Key` token (the token sends with every request form apigateway) and set set those data into `appInfoArr`.
+This object creation from `PDODB` class provides istablishing connection to data base and give the useful methods needed for database transaction.
 
 ```php
 
@@ -340,14 +383,14 @@ this function will extract data from `X-Encrypted-Key` token (the token sends wi
 $DB = new PDODB($appInfo);
 ```
 
-This object creation from `PDODB` class provides istablishing connection to data base and give the useful methods needed for database transaction.
+This object creation from the business logic class (mentioned above) takes parameters.
 
 ```php
 //Business logic class initialization
 $Skeleton = new Skeleton($appInfo,$DB, $payload);
 ```
 
-This object creation from the business logic class (mentioned above) takes parameters.
+Endpoint specific action handaling function. which is responsible for executing business logic class's method send the respose to the client.
 
 ```php
 $action_execution_function = function() use ($Skeleton){
@@ -359,7 +402,7 @@ $action_execution_function = function() use ($Skeleton){
 
 ```
 
-Endpoint specific action handaling function. which is responsible for executing business logic class's method send the respose to the client.
+This function will handle exceptions like, if there is no action found or given action are not in this endpoint.
 
 ```php
 $action_not_found = function(){
@@ -368,7 +411,7 @@ $action_not_found = function(){
 };
 ```
 
-this function will handle exceptions like, if there is no action found or given action are not in this endpoint.
+This switch block will handle function execution based on action
 
 ```php
 switch ($payload ? $payload['action'] : "") {
@@ -381,5 +424,3 @@ switch ($payload ? $payload['action'] : "") {
 }
 
 ```
-
-this switch block will handle function execution based on action
